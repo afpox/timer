@@ -82,7 +82,7 @@
 </template>
 
 <script>
-import { reactive, toRefs, onMounted } from 'vue'
+import { reactive, toRefs, onMounted, watch } from 'vue'
 import clock from './components/clock'
 import setbox from './components/setbox'
 import slider from './components/slider'
@@ -94,11 +94,11 @@ export default {
     const data = reactive({
       setRef: null,
       // clock content
-      num_h: '你',
-      num_m: '好',
-      num_s: '!',
+      num_h: '',
+      num_m: '',
+      num_s: '',
       // setting
-      hourFormat: 0, // 12h 24h 024h
+      hourFormat: 2, // 12h 24h 024h
       scale: 100,
       brightness: 100,
       showBg: true,
@@ -119,6 +119,11 @@ export default {
         return zeroNum(n)
       }
     }
+    // 初始化时赋值为当前时间
+    const now = getClock()
+    data.num_h = formatNum(now.h)
+    data.num_m = zeroNum(now.m)
+    data.num_s = zeroNum(now.s)
     const getTimer = (n) => {
       data.watching = true
       let t = 0
@@ -230,6 +235,15 @@ export default {
       }
     }
     readSet()
+    
+    // 修复 hourFormat 切换时 AM/PM 不显示问题
+    watch(() => data.hourFormat, () => {
+      let res = getClock()
+      data.num_h = formatNum(res.h)
+      data.num_m = zeroNum(res.m)
+      data.num_s = zeroNum(res.s)
+    })
+    
     onMounted(() => {
       document.onkeydown = (e) => {
         // console.log('e.keyCode', e.keyCode)
