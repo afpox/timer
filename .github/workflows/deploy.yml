@@ -38,7 +38,7 @@ jobs:
         uses: denoland/deployctl@v1
         with:
           project: "afpox-timer-98"
-          entrypoint: "index.html"
-          root: "/"
+          root: "./dist"
+          entrypoint: "./index.html"
           
           
