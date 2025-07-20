@@ -41,7 +41,4 @@ jobs:
           entrypoint: "./index.html"
           root: "./dist"
           
-      - name: Upload to Deno Deploy (Static Site)
-        run: |
-          npm install -g deployctl
-          deployctl publish ./dist --project=afpox-timer-98
+          
